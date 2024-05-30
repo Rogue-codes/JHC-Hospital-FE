@@ -4,6 +4,7 @@ import { IEducationalContent } from "../interfaces/educational.interface";
 import { edu1, edu2, edu3, edu4 } from "../assets";
 import { IPatientFee } from "../interfaces/patientfee.interface";
 import { IAppointment } from "../interfaces/appointment.interface";
+import { DataType } from "../views/patients/Patients";
 
 export const sideBarArr: ISidebar[] = [
   {
@@ -133,4 +134,47 @@ export const appointmentArr: IAppointment[] = [
     patient_name: "EG Subramani",
     doctor: "Dr. John",
   },
+];
+
+export const patientArr: DataType[] = [
+  {
+    age: 23,
+    bloodGroup: "B+",
+    emailId: "nnamdi@gmail.com",
+    gender: "Male",
+    patientName: "Chidi Okafor",
+    phoneNumber: "09098909890",
+  },
+  {
+    age: 23,
+    bloodGroup: "B+",
+    emailId: "nnamdi@gmail.com",
+    gender: "Male",
+    patientName: "Chidi Okafor",
+    phoneNumber: "09098909890",
+  },
+  {
+    age: 23,
+    bloodGroup: "B+",
+    emailId: "nnamdi@gmail.com",
+    gender: "Male",
+    patientName: "Chidi Okafor",
+    phoneNumber: "09098909890",
+  },
+  {
+    age: 23,
+    bloodGroup: "B+",
+    emailId: "nnamdi@gmail.com",
+    gender: "Male",
+    patientName: "Chidi Okafor",
+    phoneNumber: "09098909890",
+  },
+  {
+    age: 23,
+    bloodGroup: "B+",
+    emailId: "nnamdi@gmail.com",
+    gender: "Male",
+    patientName: "Chidi Okafor",
+    phoneNumber: "09098909890",
+  }
 ];
