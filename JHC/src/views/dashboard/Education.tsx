@@ -3,7 +3,7 @@ import { educationalContentArr } from '../../constants/constants';
 
 export default function Education() {
   return (
-    <div className="w-[23rem] h-[20rem] bg-white p-5">
+    <div className="w-[24.4vw] h-[20rem] bg-white p-5">
       <div className="w-full mb-3 flex justify-between items-center">
         <p className='text-JHC/Darkest font-bold'>Education Content</p>
         <Icons.expand />

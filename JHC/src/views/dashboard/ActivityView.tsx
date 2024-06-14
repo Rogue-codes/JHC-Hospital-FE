@@ -3,7 +3,7 @@ import ActivityCards from "./dashboardComponents/ActivityCards";
 
 export default function ActivityView() {
   return (
-    <div className="w-[23rem] h-[20rem] bg-white flex justify-between flex-wrap items-center px-12">
+    <div className="w-[24.4vw] h-[20rem] bg-white flex justify-between flex-wrap items-center px-12">
       <div className="w-full flex justify-between items-center mt-3">
         <p className="text-JHC/Darkest font-semibold">Activity Overview</p>
         <div className="flex justify-center items-center gap-3">

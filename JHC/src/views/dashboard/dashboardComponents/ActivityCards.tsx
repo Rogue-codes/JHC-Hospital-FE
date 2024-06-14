@@ -22,7 +22,7 @@ export default function ActivityCards({
           : position === 4
           ? "bg-[#CCA4FF]"
           : ""
-      } w-32 h-28 my-2 border flex flex-col justify-center items-center gap-1 rounded-lg`}
+      } w-[48%] h-28 my-2 border flex flex-col justify-center items-center gap-1 rounded-lg`}
     >
       <div>{icon}</div>
       <p className="text-JHC/Darkest font-semibold text-sm">{value}</p>

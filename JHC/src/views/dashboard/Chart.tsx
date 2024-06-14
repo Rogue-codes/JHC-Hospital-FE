@@ -28,7 +28,7 @@ export default function Chart() {
     },
   };
   return (
-    <div className="w-[23vw] h-full bg-white">
+    <div className="w-[27vw] 2xl:ml-16 h-full bg-white">
       <div className="w-full px-4 py-2 flex justify-between items-center">
         <p className="text-sm">Top Medicines Sold</p>
         <div className="flex justify-center gap-3 items-center">
@@ -38,7 +38,7 @@ export default function Chart() {
 
         <Icons.expand />
       </div>
-      <Pie {...config} />;
+      <Pie width={340} {...config} />;
     </div>
   );
 }

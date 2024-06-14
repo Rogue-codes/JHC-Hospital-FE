@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 // import { store } from "@app/config/store";
 import { ToastContainer, Zoom } from "react-toastify";
 import { store } from "../configs/store";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AppWrapper({
   children,
@@ -13,14 +14,14 @@ export default function AppWrapper({
 }) {
   return (
     <Provider store={store}>
-        <ToastContainer
-          position="top-right"
-          autoClose={4000}
-          draggable={false}
-          // icon={false}
-          transition={Zoom}
-        />
-        <BrowserRouter>{children}</BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        draggable={false}
+        // icon={false}
+        transition={Zoom}
+      />
+      <BrowserRouter>{children}</BrowserRouter>
     </Provider>
   );
 }

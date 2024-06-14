@@ -3,4 +3,5 @@ export interface IAppointment {
     date: string;
     patient_name: string;
     doctor: string;
+    patient_age?: number;
 }

@@ -1,10 +1,14 @@
 import { ISidebar } from "../interfaces/sidebar.interface";
 import { Icons } from "../components/icons/index";
 import { IEducationalContent } from "../interfaces/educational.interface";
-import { edu1, edu2, edu3, edu4 } from "../assets";
+import { edu1, edu2, edu3, edu4, pic } from "../assets";
 import { IPatientFee } from "../interfaces/patientfee.interface";
 import { IAppointment } from "../interfaces/appointment.interface";
 import { DataType } from "../views/patients/Patients";
+import { IDataType } from "../views/appointments/Appointments";
+import { DoctordataType } from "../views/doctors/Doctors";
+import { IMessageList } from "../interfaces/messageList.interface";
+import { IInventory } from "../interfaces/inventory.interface";
 
 export const sideBarArr: ISidebar[] = [
   {
@@ -109,30 +113,73 @@ export const appointmentArr: IAppointment[] = [
     time: "9:30 AM",
     patient_name: "Elizabeth Polson",
     doctor: "Dr. John",
+    patient_age: 23,
   },
   {
     date: "05/12/2022",
     time: "9:30 AM",
     patient_name: "John David",
     doctor: "Dr. Joel",
+    patient_age: 23,
   },
   {
     date: "05/12/2022",
     time: "10:30 AM",
     patient_name: "Sumanth Tinson",
     doctor: "Dr. Joel",
+    patient_age: 23,
   },
   {
     date: "05/12/2022",
     time: "11:00 AM",
     patient_name: "Krishtav Rajan",
     doctor: "Dr. John",
+    patient_age: 23,
   },
   {
     date: "05/12/2022",
     time: "11:30 AM",
     patient_name: "EG Subramani",
     doctor: "Dr. John",
+    patient_age: 23,
+  },
+];
+
+export const appointmentTableArr: IDataType[] = [
+  {
+    date: "05/12/2022",
+    time: "9:30 AM",
+    patientName: "Elizabeth Polson",
+    doctor: "Dr. John",
+    patientAge: 23,
+  },
+  {
+    date: "05/12/2022",
+    time: "9:30 AM",
+    patientName: "John David",
+    doctor: "Dr. Joel",
+    patientAge: 23,
+  },
+  {
+    date: "05/12/2022",
+    time: "10:30 AM",
+    patientName: "Sumanth Tinson",
+    doctor: "Dr. Joel",
+    patientAge: 23,
+  },
+  {
+    date: "05/12/2022",
+    time: "11:00 AM",
+    patientName: "Krishtav Rajan",
+    doctor: "Dr. John",
+    patientAge: 23,
+  },
+  {
+    date: "05/12/2022",
+    time: "11:30 AM",
+    patientName: "EG Subramani",
+    doctor: "Dr. John",
+    patientAge: 23,
   },
 ];
 
@@ -176,5 +223,212 @@ export const patientArr: DataType[] = [
     gender: "Male",
     patientName: "Chidi Okafor",
     phoneNumber: "09098909890",
-  }
+  },
+];
+
+export const doctorsArr: DoctordataType[] = [
+  {
+    age: 24,
+    emailId: "nnamdi@gmail.com",
+    firstName: "kelechi",
+    lastName: "Osuji",
+    gender: "Male",
+    phoneNumber: "09098909890",
+    unit: "General Medicine",
+  },
+  {
+    age: 24,
+    emailId: "nnamdi@gmail.com",
+    firstName: "kelechi",
+    lastName: "Osuji",
+    gender: "Male",
+    phoneNumber: "09098909890",
+    unit: "General Medicine",
+  },
+  {
+    age: 24,
+    emailId: "nnamdi@gmail.com",
+    firstName: "kelechi",
+    lastName: "Osuji",
+    gender: "Male",
+    phoneNumber: "09098909890",
+    unit: "General Medicine",
+  },
+  {
+    age: 24,
+    emailId: "nnamdi@gmail.com",
+    firstName: "kelechi",
+    lastName: "Osuji",
+    gender: "Male",
+    phoneNumber: "09098909890",
+    unit: "General Medicine",
+  },
+  {
+    age: 24,
+    emailId: "nnamdi@gmail.com",
+    firstName: "kelechi",
+    lastName: "Osuji",
+    gender: "Male",
+    phoneNumber: "09098909890",
+    unit: "General Medicine",
+  },
+  {
+    age: 24,
+    emailId: "nnamdi@gmail.com",
+    firstName: "kelechi",
+    lastName: "Osuji",
+    gender: "Male",
+    phoneNumber: "09098909890",
+    unit: "General Medicine",
+  },
+];
+
+export const messageListArr: IMessageList[] = [
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+  {
+    action: "Sent attachment",
+    img: pic,
+    name: "Dr John Paulliston",
+    time: "9:00am",
+    isOnline: true,
+  },
+];
+
+export const messagesListArr = [
+  {
+    msg: "Hi I need to meet Dr. Joel Tomorrow Urgently, Please arrange appointment.",
+    time: "9:00am",
+  },
+  {
+    msg: "Unfortunately, all of his appointments for tomorrow are fully booked. we do have a cancellation list, and sometimes patients cancel their appointments at the last minute. If you would like, I can put you on the cancellation list and give you a call if a spot opens up.",
+    time: "9:25am",
+  },
+  {
+    msg: "could you please check if there are any other available times for an appointment as this is an Emergency Situation.",
+    time: "9:30am",
+  },
+  {
+    msg: "Dr. Joel has agreed to see you tomorrow at 9:00 am due to the urgency of your situation.",
+    time: "9:40am",
+  },
+  {
+    msg: "Thank you for scheduling my appointment. I confirm that I will be present tomorrow at the designated time",
+    time: "9:45am",
+  },
+];
+
+
+export const drugsArr: IInventory[] = [
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
+  {
+    expiryDate: "01 Jun 2024",
+    stockCount: 100,
+    manufacturer: "John’s Health Care",
+    price: 28.55,
+    productName: "Albuterol (salbutamol)",
+    type: "Inhaler",
+  },
 ];

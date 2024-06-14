@@ -3,7 +3,7 @@ import { Icons } from '../../components/icons';
 
 export default function PatienFee() {
   return (
-    <div className="w-[23rem] h-full bg-white p-5">
+    <div className="w-[24vw] h-full bg-white p-5">
       <div className="w-full mb-3 flex justify-between items-center">
         <p className="text-JHC/Darkest font-bold">Patient Fee</p>
         <Icons.expand />

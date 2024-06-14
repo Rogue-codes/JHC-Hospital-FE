@@ -29,7 +29,7 @@ export default function Appointment() {
 
   const tabs = ["NEW APPOINTMENTS", "COMPLETED APPOINTMENTS"];
   return (
-    <div className="w-[46rem] h-[20rem] p-4 bg-white">
+    <div className="w-[53vw] h-[20rem] p-4 bg-white">
       <div className="flex justify-start items-center gap-4 mb-4">
         {tabs.map((tab, index) => (
           <div
