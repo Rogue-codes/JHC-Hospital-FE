@@ -98,7 +98,7 @@ export default function Login() {
         </form>
       </div>
 
-      <div className="absolute w-full h-full left-0 top-0 bg-red-900 ">
+      <div className="absolute w-full h-full left-0 top-0">
         <img src={bgimg} className="w-full h-full object-cover" alt="" />
       </div>
     </div>
