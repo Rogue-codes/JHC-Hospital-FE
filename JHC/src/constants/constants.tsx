@@ -6,7 +6,6 @@ import { IPatientFee } from "../interfaces/patientfee.interface";
 import { IAppointment } from "../interfaces/appointment.interface";
 import { DataType } from "../views/patients/Patients";
 import { IDataType } from "../views/appointments/Appointments";
-import { DoctordataType } from "../views/doctors/Doctors";
 import { IMessageList } from "../interfaces/messageList.interface";
 import { IInventory } from "../interfaces/inventory.interface";
 

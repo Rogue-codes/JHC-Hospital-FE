@@ -25,7 +25,6 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
   const {
     handleSubmit,
     control,
-    watch,
     formState: { errors, isValid },
   } = useForm<ICreateDoctor>({
     mode: "onChange",

@@ -8,8 +8,8 @@ import { useGetDoctorsQuery } from "../../api/doctors.api";
 import { IDoctor } from "../../interfaces/doctor.interface";
 import calcAge from "../../utils";
 import CustomPagination from "../../components/pagination/CustomPagination";
-import { useRef, useState } from "react";
-import { Button, Modal } from "antd";
+import { useState } from "react";
+import { Modal } from "antd";
 import CreateDoctor from "./CreateDoctor";
 
 export interface DoctordataType {
