@@ -4,8 +4,11 @@ import { Select } from "antd";
 
 interface IFilter {
   showDropdown?: boolean;
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  noDate?:boolean;
 }
-export default function Filter({ showDropdown }: IFilter) {
+export default function Filter({ showDropdown, search, setSearch, noDate }: IFilter) {
   return (
     <div className="w-full mt-5 flex items-center gap-12">
       <div className="w-[18vw] relative rounded-3xl border bg-[#EBF5FF]">
@@ -15,6 +18,8 @@ export default function Filter({ showDropdown }: IFilter) {
           name=""
           id=""
           placeholder="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <Icons.search className="absolute left-3 top-[10px]" />
       </div>
@@ -51,7 +56,7 @@ export default function Filter({ showDropdown }: IFilter) {
         />
       )}
 
-      <DateSelect />
+      {noDate && <DateSelect />}
 
       {showDropdown && (
         <Select

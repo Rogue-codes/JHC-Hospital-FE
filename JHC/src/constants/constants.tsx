@@ -226,61 +226,23 @@ export const patientArr: DataType[] = [
   },
 ];
 
-export const doctorsArr: DoctordataType[] = [
+export const Units = [
   {
-    age: 24,
-    emailId: "nnamdi@gmail.com",
-    firstName: "kelechi",
-    lastName: "Osuji",
-    gender: "Male",
-    phoneNumber: "09098909890",
-    unit: "General Medicine",
+    label: "Pediatrics",
+    value: "Pediatrics",
   },
   {
-    age: 24,
-    emailId: "nnamdi@gmail.com",
-    firstName: "kelechi",
-    lastName: "Osuji",
-    gender: "Male",
-    phoneNumber: "09098909890",
-    unit: "General Medicine",
+    label: "Gynecology",
+    value: "Gynecology",
   },
   {
-    age: 24,
-    emailId: "nnamdi@gmail.com",
-    firstName: "kelechi",
-    lastName: "Osuji",
-    gender: "Male",
-    phoneNumber: "09098909890",
-    unit: "General Medicine",
+    label: "General Medicine",
+    value: "General Medicine",
   },
   {
-    age: 24,
-    emailId: "nnamdi@gmail.com",
-    firstName: "kelechi",
-    lastName: "Osuji",
-    gender: "Male",
-    phoneNumber: "09098909890",
-    unit: "General Medicine",
-  },
-  {
-    age: 24,
-    emailId: "nnamdi@gmail.com",
-    firstName: "kelechi",
-    lastName: "Osuji",
-    gender: "Male",
-    phoneNumber: "09098909890",
-    unit: "General Medicine",
-  },
-  {
-    age: 24,
-    emailId: "nnamdi@gmail.com",
-    firstName: "kelechi",
-    lastName: "Osuji",
-    gender: "Male",
-    phoneNumber: "09098909890",
-    unit: "General Medicine",
-  },
+    label: "Surgery",
+    value: "Surgery",
+  }
 ];
 
 export const messageListArr: IMessageList[] = [
