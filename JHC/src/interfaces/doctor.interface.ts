@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IDoctor {
+  _id?: string;
   first_name: string;
   last_name: string;
   gender: string;
@@ -11,7 +12,7 @@ export interface IDoctor {
   img_url?: string; // optional field
   is_verified: boolean;
   is_active: boolean;
-  password: string;
+  password?: string;
   hasChangedSystemGeneratedPassword: boolean;
   createdAt?: Date; // added by Mongoose timestamps
   updatedAt?: Date; // added by Mongoose timestamps

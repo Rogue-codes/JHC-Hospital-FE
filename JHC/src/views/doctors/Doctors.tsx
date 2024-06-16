@@ -1,16 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Space, Table, TableProps } from "antd";
+import { Space, Spin, Table, TableProps } from "antd";
 import Filter from "../../components/filters/Filter";
 import DoctorHeader from "./DoctorsHeader";
 import { Icons } from "../../components/icons";
-import { useGetDoctorsQuery } from "../../api/doctors.api";
+import {
+  useChangeDoctorStatusMutation,
+  useGetDoctorByIdQuery,
+  useGetDoctorsQuery,
+} from "../../api/doctors.api";
 import { IDoctor } from "../../interfaces/doctor.interface";
 import calcAge from "../../utils";
 import CustomPagination from "../../components/pagination/CustomPagination";
 import { useState } from "react";
 import { Modal } from "antd";
 import CreateDoctor from "./CreateDoctor";
+import { ConfigProvider, Popconfirm } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import { FaCheck } from "react-icons/fa";
+import ViewDoctorDetailsModal from "./ViewDoctorDetails";
 
 export interface DoctordataType {
   // key: string;
@@ -31,10 +40,42 @@ export default function Doctors() {
   });
 
   const [openModal, setOpenModal] = useState(false);
+  const [viewDoctorDetails, setViewDoctorDetails] = useState(false);
 
-   const handleCloseModal = () => {
-     setOpenModal(false);
-   };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const [selectedDoctor, setSelectedDoctor] = useState<IDoctor | null>(null);
+
+  const text = `Are you sure to ${
+    selectedDoctor?.is_active ? "Deactivate" : "Reactivate"
+  } ${selectedDoctor?.first_name} ${selectedDoctor?.last_name}?`;
+  const description = `Doctor will become ${
+    selectedDoctor?.is_active ? "inactive" : "active"
+  }`;
+  const buttonWidth = 80;
+
+  const [changeStatus, { isLoading: changingDoctorStatus }] =
+    useChangeDoctorStatusMutation();
+
+  const { data } = useGetDoctorByIdQuery({
+    id: selectedDoctor?._id as string,
+  });
+
+  console.log("data", data);
+
+  const handleChangeStatus = (doctor: IDoctor) => {
+    changeStatus({ id: doctor._id as string })
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err?.data?.message);
+      });
+  };
 
   const columns: TableProps<IDoctor>["columns"] = [
     {
@@ -77,15 +118,52 @@ export default function Doctors() {
     {
       title: "User Action",
       key: "action",
-      render: (_) => (
+      render: (_, row) => (
         <Space size="middle" className="">
-          <div className="w-6 flex justify-center items-center h-6 rounded-lg bg-JHC-Primary cursor-pointer">
-            <Icons.chat />
-          </div>
-          <div className="w-6 h-6 rounded-lg border flex justify-center items-center border-JHC-Red cursor-pointer">
-            <Icons.cancel />
-          </div>
-          <div className="w-6 h-6 rounded-lg border flex justify-center items-center cursor-pointer  border-JHC-Primary">
+          {row.is_verified && (
+            <div className="w-6 flex justify-center items-center h-6 rounded-lg bg-JHC-Primary cursor-pointer">
+              <Icons.chat />
+            </div>
+          )}
+
+          {row.is_verified && (
+            <div
+              className={`${
+                row.is_active ? "border-JHC-Red " : "border-OBS-Green"
+              } w-6 h-6 rounded-lg border flex justify-center items-center cursor-pointer`}
+            >
+              <ConfigProvider
+                button={{
+                  style: { width: buttonWidth, margin: 4 },
+                }}
+              >
+                <Popconfirm
+                  placement="bottom"
+                  title={text}
+                  description={description}
+                  arrow
+                  okText="Yes"
+                  cancelText="No"
+                  onConfirm={() => handleChangeStatus(row)}
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                >
+                  {row.is_active ? (
+                    <Icons.cancel onClick={() => setSelectedDoctor(row)} />
+                  ) : (
+                    <FaCheck color="#47C96B" />
+                  )}
+                </Popconfirm>
+              </ConfigProvider>
+            </div>
+          )}
+
+          <div
+            className="w-6 h-6 rounded-lg border flex justify-center items-center cursor-pointer  border-JHC-Primary"
+            onClick={() => {
+              setViewDoctorDetails(true);
+              setSelectedDoctor(row);
+            }}
+          >
             <Icons.info />
           </div>
         </Space>
@@ -123,7 +201,20 @@ export default function Doctors() {
         closable
         onCancel={handleCloseModal}
       >
-        <CreateDoctor setOpenModal={setOpenModal}/>
+        <CreateDoctor setOpenModal={setOpenModal} />
+      </Modal>
+      <Spin spinning={changingDoctorStatus} fullscreen />
+      <Modal
+        title={`Dr. ${selectedDoctor?.first_name} ${selectedDoctor?.last_name}`}
+        style={{ top: 20 }}
+        open={viewDoctorDetails}
+        footer={null}
+        centered
+        className="!w-[30vw]"
+        closable
+        onCancel={() => setViewDoctorDetails(false)}
+      >
+        <ViewDoctorDetailsModal doctor={selectedDoctor as IDoctor} />
       </Modal>
     </div>
   );

@@ -28,6 +28,16 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
     formState: { errors, isValid },
   } = useForm<ICreateDoctor>({
     mode: "onChange",
+    defaultValues: {
+      email: "",
+      phone: "",
+      first_name: "",
+      last_name: "",
+      DOB: null,
+      is_consultant: false,
+      unit: "",
+      gender: "",
+    },
   });
 
   const [createDoctor, { data, isLoading, isSuccess }] =
@@ -38,7 +48,7 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
       toast.success(data?.message);
       setOpenModal(false);
     }
-  }, []);
+  }, [isSuccess]);
 
   const handleCreateDoctor = async (value: ICreateDoctor) => {
     createDoctor(value)
@@ -49,7 +59,8 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
       });
   };
 
-  const [validateEmail, { isLoading: validatingEmail }] = useValidateDoctorEmailMutation();
+  const [validateEmail, { isLoading: validatingEmail }] =
+    useValidateDoctorEmailMutation();
   const [validatePhone, { isLoading: validatingPhone }] =
     useValidateDoctorPhoneMutation();
 
@@ -161,6 +172,13 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
                 }
               />
             )}
+            rules={{
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email address",
+              },
+            }}
           />
           <Controller
             name="phone"
@@ -183,6 +201,14 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
                 }
               />
             )}
+            rules={{
+              required: "Phone number is required",
+              pattern: {
+                value: /^\+?[0-9]{11,15}$/,
+                message:
+                  "Invalid phone number. Please enter 10 to 15 digits (0-9) and optionally start with a +.",
+              },
+            }}
           />
         </div>
 

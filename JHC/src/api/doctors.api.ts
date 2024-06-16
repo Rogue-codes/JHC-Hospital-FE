@@ -61,6 +61,29 @@ export const doctorsApi = createApi({
         },
       }),
     }),
+    changeDoctorStatus: builder.mutation<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/doctor/change-status/${id}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+      invalidatesTags: ["Doctor"],
+    }),
+    getDoctorById: builder.query<
+      any,
+      { id: string }
+    >({
+      query: ({ id }) => ({
+        url: `/doctor/${id}`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+      providesTags: ["Doctor"],
+    }),
   }),
 });
 
@@ -68,5 +91,7 @@ export const {
   useGetDoctorsQuery,
   usePostDoctorMutation,
   useValidateDoctorEmailMutation,
-  useValidateDoctorPhoneMutation
+  useValidateDoctorPhoneMutation,
+  useChangeDoctorStatusMutation,
+  useGetDoctorByIdQuery
 } = doctorsApi;

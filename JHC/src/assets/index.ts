@@ -7,5 +7,6 @@ import edu3 from "./edu3.svg";
 import edu4 from "./edu4.svg";
 import pic from "./pic.svg";
 import chatbg from "./chatbg.svg";
+import user from "./userr.png";
 
-export { bgimg,JHCCllinic,g32,edu1,edu2,edu3,edu4,pic,chatbg}
+export { bgimg,JHCCllinic,g32,edu1,edu2,edu3,edu4,pic,chatbg,user}
