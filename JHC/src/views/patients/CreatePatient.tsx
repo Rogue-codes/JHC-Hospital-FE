@@ -1,27 +1,24 @@
-import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ICreatePatient } from "../../interfaces/patientfee.interface";
-import { Button, DatePicker, Input, Select, Spin, Upload } from "antd";
+import { DatePicker, Input, Select, Spin, } from "antd";
 import { blood_group, genotype } from "../../constants/constants";
-import { UploadOutlined } from "@ant-design/icons";
-import type { UploadFile, UploadProps } from "antd";
+// import { UploadOutlined } from "@ant-design/icons";
+// import type { UploadFile, UploadProps } from "antd";
 import { usePostPatientMutation } from "../../api/patients.api";
 import { toast } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
-import { capitalizeWord } from "../../utils";
 
 interface ICreatePatientModal {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export default function CreatePatient({ setOpenModal }: ICreatePatientModal) {
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const {
     handleSubmit,
     control,
-    formState: { errors, isValid, isDirty },
-    setValue,
-    watch,
+    formState: { errors, isValid },
+    // setValue,
+    // watch,
   } = useForm<ICreatePatient>({
     mode: "onChange",
     defaultValues: {
@@ -54,7 +51,7 @@ export default function CreatePatient({ setOpenModal }: ICreatePatientModal) {
 // };
 
 
-  const [createDoctor, { data, isLoading, isSuccess }] =
+  const [createDoctor, { isLoading }] =
     usePostPatientMutation();
 
   const handleCreatePatient = async (value: ICreatePatient) => {
