@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { user } from "../../assets";
 import { Button, Divider, Spin } from "antd";
 import { IPatient } from "../../interfaces/patientfee.interface";

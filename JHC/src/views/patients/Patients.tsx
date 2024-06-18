@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
-import { pic } from "../../assets";
 import Filter from "../../components/filters/Filter";
 import { Icons } from "../../components/icons";
 import PatientHeader from "./PatientHeader";

@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ICreateDoctor, IUpdateDoctor } from "../interfaces/doctor.interface";
 import Cookies from "js-cookie";
-import { IPatient, IPatientResponse } from "../interfaces/patientfee.interface";
+import { IPatientResponse } from "../interfaces/patientfee.interface";
 
 const BASE_URL = import.meta.env.VITE_APP_API_URL + "";
 
