@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ICreateDoctor } from "../interfaces/doctor.interface";
+import { ICreateDoctor, IUpdateDoctor } from "../interfaces/doctor.interface";
 import Cookies from "js-cookie";
 
 const BASE_URL = import.meta.env.VITE_APP_API_URL + "";
@@ -71,10 +71,7 @@ export const doctorsApi = createApi({
       }),
       invalidatesTags: ["Doctor"],
     }),
-    getDoctorById: builder.query<
-      any,
-      { id: string }
-    >({
+    getDoctorById: builder.query<any, { id: string }>({
       query: ({ id }) => ({
         url: `/doctor/${id}`,
         method: "GET",
@@ -83,6 +80,26 @@ export const doctorsApi = createApi({
         },
       }),
       providesTags: ["Doctor"],
+    }),
+    updateDoctor: builder.mutation<any, IUpdateDoctor>({
+      query: ({ _id, ...payload }) => ({
+        url: `/doctor/update/${_id}`,
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["Doctor"],
+    }),
+    getLogs: builder.query<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/doctor/logs/${id}`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
     }),
   }),
 });
@@ -93,5 +110,7 @@ export const {
   useValidateDoctorEmailMutation,
   useValidateDoctorPhoneMutation,
   useChangeDoctorStatusMutation,
-  useGetDoctorByIdQuery
+  useGetDoctorByIdQuery,
+  useUpdateDoctorMutation,
+  useGetLogsQuery
 } = doctorsApi;

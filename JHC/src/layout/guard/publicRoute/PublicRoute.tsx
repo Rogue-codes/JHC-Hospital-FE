@@ -11,7 +11,6 @@ const PublicRoute = ({ children }: IPublicRouteProps) => {
   const isAuthenticated = useSelector(
     (state: any) => state?.auth?.isAuthenticated
   );
-  console.log("isAuthenticated", isAuthenticated);
   if (!isAuthenticated) {
     return children;
   }

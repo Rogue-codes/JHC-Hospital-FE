@@ -20,6 +20,8 @@ import { QuestionCircleOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { FaCheck } from "react-icons/fa";
 import ViewDoctorDetailsModal from "./ViewDoctorDetails";
+import { LoadingOutlined } from "@ant-design/icons";
+
 
 export interface DoctordataType {
   // key: string;
@@ -41,6 +43,7 @@ export default function Doctors() {
 
   const [openModal, setOpenModal] = useState(false);
   const [viewDoctorDetails, setViewDoctorDetails] = useState(false);
+  const [isModify, setIsModify] = useState(false);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -59,12 +62,6 @@ export default function Doctors() {
   const [changeStatus, { isLoading: changingDoctorStatus }] =
     useChangeDoctorStatusMutation();
 
-  const { data } = useGetDoctorByIdQuery({
-    id: selectedDoctor?._id as string,
-  });
-
-  console.log("data", data);
-
   const handleChangeStatus = (doctor: IDoctor) => {
     changeStatus({ id: doctor._id as string })
       .unwrap()
@@ -76,6 +73,12 @@ export default function Doctors() {
         toast.error(err?.data?.message);
       });
   };
+
+  const { data, isLoading: getingDoctorDetails } = useGetDoctorByIdQuery({
+    id: selectedDoctor?._id as string,
+  });
+
+  const doctor = data?.data;
 
   const columns: TableProps<IDoctor>["columns"] = [
     {
@@ -150,7 +153,10 @@ export default function Doctors() {
                   {row.is_active ? (
                     <Icons.cancel onClick={() => setSelectedDoctor(row)} />
                   ) : (
-                    <FaCheck color="#47C96B" />
+                    <FaCheck
+                      color="#47C96B"
+                      onClick={() => setSelectedDoctor(row)}
+                    />
                   )}
                 </Popconfirm>
               </ConfigProvider>
@@ -201,9 +207,17 @@ export default function Doctors() {
         closable
         onCancel={handleCloseModal}
       >
-        <CreateDoctor setOpenModal={setOpenModal} />
+        <CreateDoctor
+          setOpenModal={setOpenModal}
+          isModify={isModify}
+          correctDoctorObj={doctor}
+        />
       </Modal>
-      <Spin spinning={changingDoctorStatus} fullscreen />
+      <Spin
+        spinning={changingDoctorStatus}
+        indicator={<LoadingOutlined spin style={{ fontSize: 64 }} />}
+        fullscreen
+      />
       <Modal
         title={`Dr. ${selectedDoctor?.first_name} ${selectedDoctor?.last_name}`}
         style={{ top: 20 }}
@@ -214,7 +228,13 @@ export default function Doctors() {
         closable
         onCancel={() => setViewDoctorDetails(false)}
       >
-        <ViewDoctorDetailsModal doctor={selectedDoctor as IDoctor} />
+        <ViewDoctorDetailsModal
+          doctor={doctor as IDoctor}
+          isLoading={getingDoctorDetails}
+          setOpenModal={setOpenModal}
+          setViewDoctorDetails={setViewDoctorDetails}
+          setIsModify={setIsModify}
+        />
       </Modal>
     </div>
   );

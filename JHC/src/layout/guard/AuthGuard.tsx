@@ -9,7 +9,6 @@ interface IAuthGaurdProps {
 
 const AuthGaurd = ({ children }: IAuthGaurdProps) => {
   const isAuthenticated = useSelector((state:any)=>state?.auth?.isAuthenticated);
-  console.log('isAuthenticated', isAuthenticated)
   if (isAuthenticated) {
     return children;
   }

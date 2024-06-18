@@ -4,9 +4,14 @@
 import { DatePicker, Input, Select, Switch } from "antd";
 import { Units } from "../../constants/constants";
 import { Controller, useForm } from "react-hook-form";
-import { ICreateDoctor } from "../../interfaces/doctor.interface";
+import {
+  ICreateDoctor,
+  IDoctor,
+  IUpdateDoctor,
+} from "../../interfaces/doctor.interface";
 import {
   usePostDoctorMutation,
+  useUpdateDoctorMutation,
   useValidateDoctorEmailMutation,
   useValidateDoctorPhoneMutation,
 } from "../../api/doctors.api";
@@ -16,17 +21,25 @@ import { Spin } from "antd";
 import { useEffect, useState } from "react";
 import _debounce from "lodash.debounce";
 import { MdError } from "react-icons/md";
+import dayjs from "dayjs";
 
 interface ICreateDoctorOptions {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isModify: boolean;
+  correctDoctorObj: IDoctor;
 }
 
-export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
+export default function CreateDoctor({
+  setOpenModal,
+  isModify,
+  correctDoctorObj,
+}: ICreateDoctorOptions) {
   const {
     handleSubmit,
     control,
-    formState: { errors, isValid },
-  } = useForm<ICreateDoctor>({
+    formState: { errors, isValid, isDirty },
+    setValue,
+  } = useForm<ICreateDoctor | IUpdateDoctor>({
     mode: "onChange",
     defaultValues: {
       email: "",
@@ -40,18 +53,56 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
     },
   });
 
+  const dob = dayjs(correctDoctorObj?.DOB).format("YYYY-MM-DD");
+
+  useEffect(() => {
+    if (isModify) {
+      setValue("first_name", correctDoctorObj?.first_name);
+      setValue("last_name", correctDoctorObj?.last_name);
+      setValue("email", correctDoctorObj?.email);
+      setValue("phone", correctDoctorObj?.phone);
+      setValue("gender", correctDoctorObj?.gender);
+      setValue("unit", correctDoctorObj?.unit);
+      setValue("is_consultant", correctDoctorObj?.is_consultant);
+      // Convert date string to dayjs object
+      const dob_ = dayjs(dob);
+      setValue("DOB", dob_);
+    }
+  }, [isModify, correctDoctorObj]);
+
   const [createDoctor, { data, isLoading, isSuccess }] =
     usePostDoctorMutation();
+
+  const [
+    updateDoctor,
+    {
+      data: update,
+      isLoading: isUpdatingDoctor,
+      isSuccess: isUpdateSuccessful,
+    },
+  ] = useUpdateDoctorMutation();
 
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message);
       setOpenModal(false);
+    } else if (isUpdateSuccessful) {
+      toast.success(update?.message);
+      setOpenModal(false);
     }
-  }, [isSuccess]);
+  }, [isSuccess, isUpdatingDoctor]);
 
   const handleCreateDoctor = async (value: ICreateDoctor) => {
     createDoctor(value)
+      .unwrap()
+      .catch((e: any) => {
+        console.log(e);
+        toast.error(e?.data?.message);
+      });
+  };
+
+  const handleUpdateDoctor = async (value: any) => {
+    updateDoctor({ ...value, _id: correctDoctorObj._id as string })
       .unwrap()
       .catch((e: any) => {
         console.log(e);
@@ -67,10 +118,6 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
   const [isEmailExisting, setIsEmailExisting] = useState<boolean | null>(null);
   const [isPhoneExisting, setIsPhoneExisting] = useState<boolean | null>(null);
 
-  console.log("validation result: ", {
-    isEmailExisting,
-    isPhoneExisting,
-  });
 
   const checkUniqueness = _debounce((e) => {
     const { name, value } = e.target;
@@ -97,8 +144,13 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
     }
   }, 2000);
 
+
   return (
-    <form onSubmit={handleSubmit(handleCreateDoctor)}>
+    <form
+      onSubmit={handleSubmit(
+        correctDoctorObj ? handleUpdateDoctor : handleCreateDoctor
+      )}
+    >
       <div className="w-full bg-white">
         <div className="w-full flex my-8 justify-between items-center gap-5">
           <Controller
@@ -156,6 +208,7 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
             control={control}
             render={({ field }) => (
               <Input
+                disabled={correctDoctorObj !== undefined}
                 onKeyUp={checkUniqueness}
                 status={errors.email || isEmailExisting ? "error" : undefined}
                 placeholder={errors.email ? errors.email.message : "Email"}
@@ -277,10 +330,16 @@ export default function CreateDoctor({ setOpenModal }: ICreateDoctorOptions) {
 
         <button
           type="submit"
-          disabled={!isValid}
+          disabled={correctDoctorObj ? !isValid : !isDirty}
           className="bg-JHC-Primary text-white p-1 disabled:opacity-50 disabled:cursor-not-allowed border border-JHC-Primary hover:scale-110 transition-all px-6 rounded-lg"
         >
-          {isLoading ? <Spin indicator={<LoadingOutlined spin />} /> : "Create"}
+          {isLoading || isUpdatingDoctor ? (
+            <Spin className="text-white" indicator={<LoadingOutlined spin color="white" />} />
+          ) : correctDoctorObj ? (
+            "Modify"
+          ) : (
+            "Create"
+          )}
         </button>
       </div>
     </form>

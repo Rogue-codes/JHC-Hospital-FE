@@ -40,3 +40,15 @@ export interface ICreateDoctor {
   unit: string;
   gender: string;
 }
+
+export interface IUpdateDoctor {
+  _id: string;
+  email: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  DOB: any;
+  is_consultant: boolean;
+  unit: string;
+  gender: string;
+}
