@@ -16,7 +16,7 @@ export default function ViewPatientDetails({ patient }: IPatientDetails) {
     id: patient._id as string,
   });
 
-  const patientDetails = data?.data;
+  const patientDetails: IPatient = data?.data;
   return (
     <div className="w-full bg-white">
       {isLoading ? (
@@ -26,11 +26,19 @@ export default function ViewPatientDetails({ patient }: IPatientDetails) {
       ) : (
         <>
           <div className="w-[200px] h-[200px] mx-auto border p-2 rounded-full">
-            <img
-              src={user}
-              className="w-full h-full rounded-full object-contain"
-              alt=""
-            />
+            {!patientDetails.img_url ? (
+              <img
+                src={user}
+                className="w-full h-full rounded-full object-contain"
+                alt=""
+              />
+            ) : (
+              <img
+                src={patientDetails.img_url}
+                className="w-full h-full rounded-full object-cover"
+                alt=""
+              />
+            )}
           </div>
           <Divider />
           <>

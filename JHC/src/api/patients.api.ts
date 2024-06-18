@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
-import { IPatientResponse } from "../interfaces/patientfee.interface";
+import { ICreatePatient, IPatientResponse } from "../interfaces/patientfee.interface";
 
 const BASE_URL = import.meta.env.VITE_APP_API_URL + "";
 
@@ -32,17 +32,17 @@ export const patientsApi = createApi({
       }),
       providesTags: ["Patient"],
     }),
-    // postDoctor: builder.mutation<any, ICreateDoctor>({
-    //   query: (payload) => ({
-    //     url: `/doctor/create`,
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=UTF-8",
-    //     },
-    //     body: payload,
-    //   }),
-    //   invalidatesTags: ["Doctor"],
-    // }),
+    postPatient: builder.mutation<any, ICreatePatient>({
+      query: (payload) => ({
+        url: `/patient/create`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["Patient"],
+    }),
     // validateDoctorEmail: builder.mutation<any, { value: string }>({
     //   query: ({ value }) => ({
     //     url: `/doctor/validate?email=${value}`,
@@ -107,4 +107,6 @@ export const {
   useGetPatientsQuery,
   useGetPatientByIdQuery,
   useGetPatientLogsQuery,
+  usePostPatientMutation,
+
 } = patientsApi;

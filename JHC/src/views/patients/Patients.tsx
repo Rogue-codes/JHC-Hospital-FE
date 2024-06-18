@@ -7,8 +7,9 @@ import { Modal, Space, Table, type TableProps } from "antd";
 import { useGetPatientsQuery } from "../../api/patients.api";
 import CustomPagination from "../../components/pagination/CustomPagination";
 import { IPatient } from "../../interfaces/patientfee.interface";
-import calcAge from "../../utils";
+import calcAge, { showInitials } from "../../utils";
 import ViewPatientDetails from "./ViewPatientDetails";
+import CreatePatient from "./CreatePatient";
 
 export interface DataType {
   // key: string;
@@ -22,19 +23,34 @@ export interface DataType {
 export default function Patients() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
+  const [showCreatePatientModal, setShowCreatePatientModal] = useState(false);
   const [showPatientModal, setShowPatientModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<IPatient | null>(null);
 
+  const handleCloseModal = () => {
+    setShowCreatePatientModal(false);
+  };
   const columns: TableProps<IPatient>["columns"] = [
     {
       title: "Patient Name",
       dataIndex: "patientName",
       key: "patient_name",
-      render: (_, { first_name, last_name , img_url}) => (
+      render: (_, { first_name, last_name, img_url }) => (
         <Space size="middle" className="">
-          <div className="w-8 flex justify-center items-center h-8 rounded-full cursor-pointer">
-            <img src={img_url} className="w-full h-full object-cover rounded-full" alt="" />
-          </div>
+          {!img_url ? (
+            <div className="w-8 flex border bg-JHC-Primary text-white justify-center items-center h-8 rounded-full cursor-pointer">
+              {showInitials(first_name, last_name)}
+            </div>
+          ) : (
+            <div className="w-8 flex justify-center items-center h-8 rounded-full cursor-pointer">
+              <img
+                src={img_url}
+                className="w-full h-full object-cover rounded-full"
+                alt=""
+              />
+            </div>
+          )}
+
           <p>
             {first_name} {last_name}
           </p>
@@ -105,7 +121,7 @@ export default function Patients() {
 
   return (
     <div className="w-full p-5 bg-white border rounded-lg">
-      <PatientHeader setShowCreatePatientModal={setShowPatientModal} />
+      <PatientHeader setShowCreatePatientModal={setShowCreatePatientModal} />
       <Filter search={searchText} setSearch={setSearchText} />
       <div className="mt-24">
         <Table
@@ -124,6 +140,23 @@ export default function Patients() {
       </div>
 
       <Modal
+        title="Create Doctor"
+        style={{ top: 20 }}
+        open={showCreatePatientModal}
+        footer={null}
+        centered
+        className="!w-[50vw]"
+        closable
+        onCancel={handleCloseModal}
+      >
+        <CreatePatient
+          setOpenModal={setShowCreatePatientModal}
+          // isModify={isModify}
+          // correctDoctorObj={doctor}
+        />
+      </Modal>
+
+      <Modal
         title={`${selectedPatient?.gender === "female" ? "Mrs" : "Mr"}. ${
           selectedPatient?.first_name
         } ${selectedPatient?.last_name}`}
@@ -135,7 +168,7 @@ export default function Patients() {
         closable
         onCancel={() => setShowPatientModal(false)}
       >
-        <ViewPatientDetails patient={selectedPatient as IPatient}/>
+        <ViewPatientDetails patient={selectedPatient as IPatient} />
       </Modal>
     </div>
   );

@@ -182,48 +182,6 @@ export const appointmentTableArr: IDataType[] = [
   },
 ];
 
-export const patientArr: DataType[] = [
-  {
-    age: 23,
-    bloodGroup: "B+",
-    emailId: "nnamdi@gmail.com",
-    gender: "Male",
-    patientName: "Chidi Okafor",
-    phoneNumber: "09098909890",
-  },
-  {
-    age: 23,
-    bloodGroup: "B+",
-    emailId: "nnamdi@gmail.com",
-    gender: "Male",
-    patientName: "Chidi Okafor",
-    phoneNumber: "09098909890",
-  },
-  {
-    age: 23,
-    bloodGroup: "B+",
-    emailId: "nnamdi@gmail.com",
-    gender: "Male",
-    patientName: "Chidi Okafor",
-    phoneNumber: "09098909890",
-  },
-  {
-    age: 23,
-    bloodGroup: "B+",
-    emailId: "nnamdi@gmail.com",
-    gender: "Male",
-    patientName: "Chidi Okafor",
-    phoneNumber: "09098909890",
-  },
-  {
-    age: 23,
-    bloodGroup: "B+",
-    emailId: "nnamdi@gmail.com",
-    gender: "Male",
-    patientName: "Chidi Okafor",
-    phoneNumber: "09098909890",
-  },
-];
 
 export const Units = [
   {
@@ -241,6 +199,56 @@ export const Units = [
   {
     label: "Surgery",
     value: "Surgery",
+  }
+];
+
+export const blood_group = [
+  {
+    label: "A+",
+    value: "A+",
+  },
+  {
+    label: "B+",
+    value: "B+",
+  },
+  {
+    label: "AB+",
+    value: "AB+",
+  },
+  {
+    label: "O+",
+    value: "O+",
+  },
+  {
+    label: "A-",
+    value: "A-",
+  },
+  {
+    label: "B-",
+    value: "B-",
+  },
+  {
+    label: "AB-",
+    value: "AB-",
+  },
+  {
+    label: "O-",
+    value: "O-",
+  }
+];
+
+export const genotype = [
+  {
+    label: "AA",
+    value: "AA",
+  },
+  {
+    label: "AS",
+    value: "AS",
+  },
+  {
+    label: "SS",
+    value: "SS",
   }
 ];
 

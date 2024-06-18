@@ -34,3 +34,15 @@ export interface IPatientResponse {
     total: number;
   };
 }
+
+export interface ICreatePatient {
+  email: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  DOB: any;
+  blood_group: string;
+  genotype: string;
+  password: string;
+  gender: string;
+}
