@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
-import { ICreatePatient, IPatientResponse } from "../interfaces/patientfee.interface";
+import {
+  ICreatePatient,
+  IPatientResponse,
+  IUpdatePatient,
+} from "../interfaces/patientfee.interface";
 
 const BASE_URL = import.meta.env.VITE_APP_API_URL + "";
 
@@ -43,24 +47,24 @@ export const patientsApi = createApi({
       }),
       invalidatesTags: ["Patient"],
     }),
-    // validateDoctorEmail: builder.mutation<any, { value: string }>({
-    //   query: ({ value }) => ({
-    //     url: `/doctor/validate?email=${value}`,
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=UTF-8",
-    //     },
-    //   }),
-    // }),
-    // validateDoctorPhone: builder.mutation<any, { value: string }>({
-    //   query: ({ value }) => ({
-    //     url: `/doctor/validate?phone=${value}`,
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=UTF-8",
-    //     },
-    //   }),
-    // }),
+    validatePatientEmail: builder.mutation<any, { value: string }>({
+      query: ({ value }) => ({
+        url: `/patient/validate?email=${value}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+    }),
+    validatePatientPhone: builder.mutation<any, { value: string }>({
+      query: ({ value }) => ({
+        url: `/patient/validate?phone=${value}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+    }),
     // changeDoctorStatus: builder.mutation<any, { id: string }>({
     //   query: ({ id }) => ({
     //     url: `/doctor/change-status/${id}`,
@@ -80,17 +84,17 @@ export const patientsApi = createApi({
         },
       }),
     }),
-    // updateDoctor: builder.mutation<any, IUpdateDoctor>({
-    //   query: ({ _id, ...payload }) => ({
-    //     url: `/doctor/update/${_id}`,
-    //     method: "PATCH",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=UTF-8",
-    //     },
-    //     body: payload,
-    //   }),
-    //   invalidatesTags: ["Doctor"],
-    // }),
+    updatePatient: builder.mutation<any, {payload:IUpdatePatient; id:string}>({
+      query: ({ id, payload }) => ({
+        url: `/patient/update/${id}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["Patient"],
+    }),
     getPatientLogs: builder.query<any, { id: string }>({
       query: ({ id }) => ({
         url: `/patient/logs/${id}`,
@@ -108,5 +112,7 @@ export const {
   useGetPatientByIdQuery,
   useGetPatientLogsQuery,
   usePostPatientMutation,
-
+  useValidatePatientEmailMutation,
+  useValidatePatientPhoneMutation,
+  useUpdatePatientMutation
 } = patientsApi;

@@ -92,6 +92,7 @@ export default function CreateDoctor({
     }
   }, [isSuccess, isUpdatingDoctor]);
 
+
   const handleCreateDoctor = async (value: ICreateDoctor) => {
     createDoctor(value)
       .unwrap()
@@ -118,7 +119,6 @@ export default function CreateDoctor({
   const [isEmailExisting, setIsEmailExisting] = useState<boolean | null>(null);
   const [isPhoneExisting, setIsPhoneExisting] = useState<boolean | null>(null);
 
-
   const checkUniqueness = _debounce((e) => {
     const { name, value } = e.target;
 
@@ -143,7 +143,6 @@ export default function CreateDoctor({
         break;
     }
   }, 2000);
-
 
   return (
     <form
@@ -334,7 +333,10 @@ export default function CreateDoctor({
           className="bg-JHC-Primary text-white p-1 disabled:opacity-50 disabled:cursor-not-allowed border border-JHC-Primary hover:scale-110 transition-all px-6 rounded-lg"
         >
           {isLoading || isUpdatingDoctor ? (
-            <Spin className="text-white" indicator={<LoadingOutlined spin color="white" />} />
+            <Spin
+              className="text-white"
+              indicator={<LoadingOutlined spin color="white" />}
+            />
           ) : correctDoctorObj ? (
             "Modify"
           ) : (

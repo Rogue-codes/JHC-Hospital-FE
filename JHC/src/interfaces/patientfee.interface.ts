@@ -14,7 +14,7 @@ export interface IPatient {
   genotype: string;
   phone: string;
   email: string;
-  img_url?: string; 
+  img_url?: string;
   is_verified: boolean;
   patient_id: string;
   password?: string;
@@ -45,4 +45,19 @@ export interface ICreatePatient {
   genotype: string;
   password: string;
   gender: string;
+  patient_img?: any;
+}
+
+
+export interface IUpdatePatient {
+  email: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  DOB: any;
+  blood_group: string;
+  genotype: string;
+  gender: string;
+  patient_img?:string;
+  password?:string;
 }

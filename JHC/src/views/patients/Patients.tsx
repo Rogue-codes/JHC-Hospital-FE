@@ -4,7 +4,7 @@ import Filter from "../../components/filters/Filter";
 import { Icons } from "../../components/icons";
 import PatientHeader from "./PatientHeader";
 import { Modal, Space, Table, type TableProps } from "antd";
-import { useGetPatientsQuery } from "../../api/patients.api";
+import { useGetPatientByIdQuery, useGetPatientsQuery } from "../../api/patients.api";
 import CustomPagination from "../../components/pagination/CustomPagination";
 import { IPatient } from "../../interfaces/patientfee.interface";
 import calcAge, { showInitials } from "../../utils";
@@ -30,6 +30,15 @@ export default function Patients() {
   const handleCloseModal = () => {
     setShowCreatePatientModal(false);
   };
+
+  const handleModify = () => {
+    setShowPatientModal(false);
+    setShowCreatePatientModal(true);
+  }
+
+  const {data:patientData} = useGetPatientByIdQuery({id:selectedPatient?._id as string})
+  const patient = patientData?.data;
+
   const columns: TableProps<IPatient>["columns"] = [
     {
       title: "Patient Name",
@@ -123,7 +132,7 @@ export default function Patients() {
     <div className="w-full p-5 bg-white border rounded-lg">
       <PatientHeader setShowCreatePatientModal={setShowCreatePatientModal} />
       <Filter search={searchText} setSearch={setSearchText} />
-      <div className="mt-24">
+      <div className="mt-12">
         <Table
           columns={columns}
           dataSource={data?.data}
@@ -140,7 +149,7 @@ export default function Patients() {
       </div>
 
       <Modal
-        title="Create Doctor"
+        title="Create Patient"
         style={{ top: 20 }}
         open={showCreatePatientModal}
         footer={null}
@@ -152,7 +161,7 @@ export default function Patients() {
         <CreatePatient
           setOpenModal={setShowCreatePatientModal}
           // isModify={isModify}
-          // correctDoctorObj={doctor}
+          correctPatientObj={patient}
         />
       </Modal>
 
@@ -168,7 +177,10 @@ export default function Patients() {
         closable
         onCancel={() => setShowPatientModal(false)}
       >
-        <ViewPatientDetails patient={selectedPatient as IPatient} />
+        <ViewPatientDetails
+          handleModify={handleModify}
+          patient={selectedPatient as IPatient}
+        />
       </Modal>
     </div>
   );

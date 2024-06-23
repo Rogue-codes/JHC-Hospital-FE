@@ -6,11 +6,13 @@ import calcAge from "../../utils";
 import { useGetPatientByIdQuery } from "../../api/patients.api";
 import { LoadingOutlined } from "@ant-design/icons";
 import ActivityLog from "../../components/activityLog/ActivityLog";
+import { FaRegEdit } from "react-icons/fa";
 
 interface IPatientDetails {
+  handleModify: () => void;
   patient: IPatient;
 }
-export default function ViewPatientDetails({ patient }: IPatientDetails) {
+export default function ViewPatientDetails({ patient,handleModify }: IPatientDetails) {
   const [viewLogs, setViewLogs] = useState(false);
   const { data, isLoading } = useGetPatientByIdQuery({
     id: patient._id as string,
@@ -72,7 +74,14 @@ export default function ViewPatientDetails({ patient }: IPatientDetails) {
           </>
 
           <Divider />
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex justify-between items-center">
+            <Button
+              className="flex justify-start gap-1 items-center"
+              onClick={handleModify}
+            >
+              <FaRegEdit color="#D4A62F" />
+              Modify
+            </Button>
             <Button type="primary" onClick={() => setViewLogs(!viewLogs)}>
               {viewLogs ? "Go Back" : "View Activity Log"}
             </Button>
