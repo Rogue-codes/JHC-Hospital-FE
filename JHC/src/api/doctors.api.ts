@@ -102,6 +102,15 @@ export const doctorsApi = createApi({
         },
       }),
     }),
+    getActiveDoctors: builder.query<any, any>({
+      query: () => ({
+        url: `/doctors/active`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+    }),
   }),
 });
 
@@ -113,5 +122,6 @@ export const {
   useChangeDoctorStatusMutation,
   useGetDoctorByIdQuery,
   useUpdateDoctorMutation,
-  useGetLogsQuery
+  useGetLogsQuery,
+  useGetActiveDoctorsQuery
 } = doctorsApi;

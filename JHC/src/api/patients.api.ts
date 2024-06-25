@@ -25,7 +25,7 @@ export const patientsApi = createApi({
   endpoints: (builder) => ({
     getPatients: builder.query<
       IPatientResponse,
-      { search: string; limit?: number; page: number }
+      { search: string; limit?: number; page?: number }
     >({
       query: ({ search, limit, page }) => ({
         url: `/patients/all?search=${search}&page=${page}&limit=${limit}`,
@@ -65,16 +65,6 @@ export const patientsApi = createApi({
         },
       }),
     }),
-    // changeDoctorStatus: builder.mutation<any, { id: string }>({
-    //   query: ({ id }) => ({
-    //     url: `/doctor/change-status/${id}`,
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=UTF-8",
-    //     },
-    //   }),
-    //   invalidatesTags: ["Doctor"],
-    // }),
     getPatientById: builder.query<any, { id: string }>({
       query: ({ id }) => ({
         url: `/patient/${id}`,
@@ -84,7 +74,10 @@ export const patientsApi = createApi({
         },
       }),
     }),
-    updatePatient: builder.mutation<any, {payload:IUpdatePatient; id:string}>({
+    updatePatient: builder.mutation<
+      any,
+      { payload: IUpdatePatient; id: string }
+    >({
       query: ({ id, payload }) => ({
         url: `/patient/update/${id}`,
         method: "PUT",
@@ -104,6 +97,15 @@ export const patientsApi = createApi({
         },
       }),
     }),
+    searchPatients: builder.query<any, { search: string }>({
+      query: ({ search }) => ({
+        url: `/patient?search=${search}`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+    }),
   }),
 });
 
@@ -114,5 +116,6 @@ export const {
   usePostPatientMutation,
   useValidatePatientEmailMutation,
   useValidatePatientPhoneMutation,
-  useUpdatePatientMutation
+  useUpdatePatientMutation,
+  useSearchPatientsQuery,
 } = patientsApi;

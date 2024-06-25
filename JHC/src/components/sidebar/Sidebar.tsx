@@ -17,7 +17,7 @@ export default function Sidebar() {
           <div
             className={`${
               element.path === location.pathname
-                ? "border-l-4 border-JHC-Primary bg-JHC/Light text-JHC-Primary font-bold"
+                ? "border-l-4 !border-JHC-Primary bg-JHC/Light text-JHC-Primary font-bold"
                 : ""
             } w-full py-4 hover:bg-JHC/Light cursor-pointer text-sm mt-7 flex justify-start items-center gap-4 px-4 border-black`}
             key={index}

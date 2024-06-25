@@ -11,15 +11,6 @@ import calcAge, { showInitials } from "../../utils";
 import ViewPatientDetails from "./ViewPatientDetails";
 import CreatePatient from "./CreatePatient";
 
-export interface DataType {
-  // key: string;
-  patientName: string;
-  age: number;
-  gender: string;
-  bloodGroup: string;
-  phoneNumber: string;
-  emailId: string;
-}
 export default function Patients() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");

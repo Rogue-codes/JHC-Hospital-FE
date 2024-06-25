@@ -3,7 +3,6 @@ import { Icons } from "../components/icons/index";
 import { IEducationalContent } from "../interfaces/educational.interface";
 import { edu1, edu2, edu3, edu4, pic } from "../assets";
 import { IPatientFee } from "../interfaces/patientfee.interface";
-import { IAppointment } from "../interfaces/appointment.interface";
 import { IDataType } from "../views/appointments/Appointments";
 import { IMessageList } from "../interfaces/messageList.interface";
 import { IInventory } from "../interfaces/inventory.interface";
@@ -105,41 +104,41 @@ export const patientFeeArr: IPatientFee[] = [
   },
 ];
 
-export const appointmentArr: IAppointment[] = [
+export const appointmentArr: IDataType[] = [
   {
     date: "05/12/2022",
     time: "9:30 AM",
-    patient_name: "Elizabeth Polson",
+    patientName: "Elizabeth Polson",
     doctor: "Dr. John",
-    patient_age: 23,
+    patientAge: 23,
   },
   {
     date: "05/12/2022",
     time: "9:30 AM",
-    patient_name: "John David",
+    patientName: "John David",
     doctor: "Dr. Joel",
-    patient_age: 23,
+    patientAge: 23,
   },
   {
     date: "05/12/2022",
     time: "10:30 AM",
-    patient_name: "Sumanth Tinson",
+    patientName: "Sumanth Tinson",
     doctor: "Dr. Joel",
-    patient_age: 23,
+    patientAge: 23,
   },
   {
     date: "05/12/2022",
     time: "11:00 AM",
-    patient_name: "Krishtav Rajan",
+    patientName: "Krishtav Rajan",
     doctor: "Dr. John",
-    patient_age: 23,
+    patientAge: 23,
   },
   {
     date: "05/12/2022",
     time: "11:30 AM",
-    patient_name: "EG Subramani",
+    patientName: "EG Subramani",
     doctor: "Dr. John",
-    patient_age: 23,
+    patientAge: 23,
   },
 ];
 

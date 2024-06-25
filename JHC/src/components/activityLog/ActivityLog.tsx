@@ -4,16 +4,28 @@ import { useGetLogsQuery } from "../../api/doctors.api";
 import { LoadingOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useGetPatientLogsQuery } from "../../api/patients.api";
+import { useGetReservationLogsQuery } from "../../api/reservation.api";
 
 interface IActivityLog {
   id: string;
-  log:string
+  log: string;
 }
-export default function ActivityLog({ id,log }: IActivityLog) {
-  const { data: doctorLog, isLoading:doctorLogLoading } = useGetLogsQuery({ id });
-  const { data: patientLog, isLoading:patientLogLoading } = useGetPatientLogsQuery({ id });
-
-  const Logs = log === "doctor" ? doctorLog?.data : patientLog?.data
+export default function ActivityLog({ id, log }: IActivityLog) {
+  const { data: doctorLog, isLoading: doctorLogLoading } = useGetLogsQuery({
+    id,
+  });
+  const { data: patientLog, isLoading: patientLogLoading } =
+    useGetPatientLogsQuery({ id });
+  const { data: reservationLogsData, isLoading: loadingLogs } =
+    useGetReservationLogsQuery({
+      id,
+    });
+  const Logs =
+    log === "doctor"
+      ? doctorLog?.data
+      : log === "patient"
+      ? patientLog?.data
+      : reservationLogsData?.data;
 
   const activity = Logs?.map((data: any) => {
     return {
@@ -27,13 +39,12 @@ export default function ActivityLog({ id,log }: IActivityLog) {
     };
   });
 
-
   return (
     <div>
       <Timeline items={activity} />
       <div className="w-full flex justify-center items-center">
         <Spin
-          spinning={doctorLogLoading || patientLogLoading}
+          spinning={doctorLogLoading || patientLogLoading || loadingLogs}
           indicator={
             <LoadingOutlined
               spin

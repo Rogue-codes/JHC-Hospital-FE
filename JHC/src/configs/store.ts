@@ -4,6 +4,7 @@ import { userSlice } from "./globalSlice";
 import { authApi } from "../api/auth.api";
 import { doctorsApi } from "../api/doctors.api";
 import { patientsApi } from "../api/patients.api";
+import { reservationApi } from "../api/reservation.api";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [doctorsApi.reducerPath]: doctorsApi.reducer,
     [patientsApi.reducerPath]: patientsApi.reducer,
+    [reservationApi.reducerPath]: reservationApi.reducer,
     auth: userSlice.reducer,
   },
 
@@ -18,7 +20,8 @@ export const store = configureStore({
     getDefaultMiddleware()
       .concat(authApi.middleware)
       .concat(doctorsApi.middleware)
-      .concat(patientsApi.middleware),
+      .concat(patientsApi.middleware)
+      .concat(reservationApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -17,7 +17,7 @@ export default function Appointment() {
     },
     {
       title: " Patient Name",
-      dataIndex: "patient_name",
+      dataIndex: "patientName",
       key: "patient_name",
     },
     {
