@@ -20,7 +20,11 @@ export interface IAppointment {
     last_name: string;
   };
   fee: number;
-  reservation_status: "pending" | "ongoing" | "completed";
+  reservation_status: "pending"|
+        "awaiting doctor approval"|
+        "rejected"|
+        "ongoing"|
+        "completed";
   fee_status: "unpaid" | "paid";
 }
 
@@ -34,4 +38,8 @@ export interface IReservationResponse {
     per_page: number;
     total: number;
   };
+}
+
+export interface IRescheduleAppointment {
+  time: any;
 }

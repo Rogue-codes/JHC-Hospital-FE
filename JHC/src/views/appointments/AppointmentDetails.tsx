@@ -1,18 +1,23 @@
-import { Divider, Spin } from "antd";
+import { ConfigProvider, Divider, Popconfirm, Spin, Tag } from "antd";
 import { AiOutlineStop } from "react-icons/ai";
 import { FaRegEdit } from "react-icons/fa";
 import { IAppointment } from "../../interfaces/appointment.interface";
 import { LoadingOutlined } from "@ant-design/icons";
 import {
   useGetReservationByIdQuery,
+  useRejectAppointmentMutation,
 } from "../../api/reservation.api";
 import ActivityLog from "../../components/activityLog/ActivityLog";
+import { toast } from "react-toastify";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 interface IAppointmentDetails {
   selectedAppointment: IAppointment | null;
+  setRescheduleAppointmentModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export default function AppointmentDetails({
   selectedAppointment,
+  setRescheduleAppointmentModal,
 }: IAppointmentDetails) {
   const { data: reservationData, isLoading } = useGetReservationByIdQuery({
     id: selectedAppointment?._id as string,
@@ -35,6 +40,27 @@ export default function AppointmentDetails({
   };
 
   const formattedDate = formatDate(reservation?.time);
+  const text = `Are you sure you want to 
+      Reject appointment for 
+    ${selectedAppointment?.patient?.first_name} ${selectedAppointment?.patient?.last_name} with Dr. ${selectedAppointment?.doctor?.first_name} ${selectedAppointment?.doctor?.last_name}?`;
+  const description = `Appointment will be canceled.`;
+  const buttonWidth = 80;
+
+  const [rejectAppointment, { isLoading: rejectingAppointment }] =
+    useRejectAppointmentMutation();
+
+  const handleAppointmentRejection = () => {
+    rejectAppointment({ id: selectedAppointment?._id as string })
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err?.data?.message);
+      });
+  };
+
   return (
     <div className="p-6">
       {isLoading ? (
@@ -99,25 +125,42 @@ export default function AppointmentDetails({
               <Divider />
 
               <div>
-                <p className="mt-5 font-bold">Appointment Details</p>
-                <div className="flex justify-start gap-12 items-center">
+                <p className="mt-3 font-bold">Appointment Details</p>
+                <div className="flex mt-4 justify-start gap-12 items-center">
                   <div>
                     <p className="font-bold">Status:</p>{" "}
-                    <p>{reservation.reservation_status}</p>
+                    <Tag
+                      color={
+                        reservation.reservation_status === "rejected"
+                          ? "red"
+                          : ""
+                      }
+                    >
+                      {reservation.reservation_status}
+                    </Tag>
                   </div>
 
                   <div>
                     <p className="font-bold">Fee:</p>{" "}
                     <p>
-                      ₦{reservation.fee.toLocaleString()} (
-                      {reservation.fee_status})
+                      ₦{reservation.fee.toLocaleString()} 
+                      <Tag
+                      className="ml-3"
+                        color={
+                          reservation.fee_status === "unpaid"
+                            ? "orange"
+                            : "green"
+                        }
+                      >
+                        ({reservation.fee_status})
+                      </Tag>
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="w-1/2 min-h-[58vh] rounded-lg p-4 border overflow-y-scroll">
+            <div className="w-1/2 h-[58vh] rounded-lg p-4 border overflow-y-scroll">
               <h1 className="text-lg font-semibold mb-5">Activity logs</h1>
               <Divider />
               <ActivityLog
@@ -129,20 +172,52 @@ export default function AppointmentDetails({
 
           <Divider />
           <div className="w-full flex justify-start items-center gap-5">
-            <div className="flex cursor-pointer justify-start items-center gap-1">
+            <button
+              disabled={selectedAppointment?.reservation_status === "rejected"}
+              className="flex cursor-pointer justify-start items-center gap-1 disabled:opacity-50"
+              onClick={() => setRescheduleAppointmentModal(true)}
+            >
               {" "}
               <FaRegEdit size={20} color="#D4A62F" />
               Reschedule
-            </div>
+            </button>
 
-            <div className="flex cursor-pointer justify-start items-center gap-1">
-              {" "}
-              <AiOutlineStop size={20} color="red" />
-              Reject
-            </div>
+            <ConfigProvider
+              button={{
+                style: { width: buttonWidth, margin: 4 },
+              }}
+            >
+              <Popconfirm
+                placement="bottom"
+                title={text}
+                description={description}
+                arrow
+                okText="Yes"
+                cancelText="No"
+                onConfirm={handleAppointmentRejection}
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <button
+                  disabled={
+                    selectedAppointment?.reservation_status === "rejected"
+                  }
+                  className="flex cursor-pointer justify-start items-center gap-1 disabled:opacity-50"
+                >
+                  {" "}
+                  <AiOutlineStop size={20} color="red" />
+                  Reject
+                </button>
+              </Popconfirm>
+            </ConfigProvider>
           </div>
         </div>
       )}
+
+      <Spin
+        spinning={rejectingAppointment}
+        indicator={<LoadingOutlined spin style={{ fontSize: 64 }} />}
+        fullscreen
+      />
     </div>
   );
 }

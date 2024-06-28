@@ -28,8 +28,15 @@ export default function ActivityLog({ id, log }: IActivityLog) {
       : reservationLogsData?.data;
 
   const activity = Logs?.map((data: any) => {
+    const status = data?.activity.split(" ")[1];
+    console.log("status", status);
     return {
-      color: "green",
+      color:
+        status === "REJECTED"
+          ? "red"
+          : status === "RESCHEDULED"
+          ? "orange"
+          : "green",
       children: (
         <>
           <p>{data?.activity}</p>

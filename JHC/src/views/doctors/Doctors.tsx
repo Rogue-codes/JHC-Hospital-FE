@@ -51,7 +51,7 @@ export default function Doctors() {
 
   const [selectedDoctor, setSelectedDoctor] = useState<IDoctor | null>(null);
 
-  const text = `Are you sure to ${
+  const text = `Are you sure you want to ${
     selectedDoctor?.is_active ? "Deactivate" : "Reactivate"
   } ${selectedDoctor?.first_name} ${selectedDoctor?.last_name}?`;
   const description = `Doctor will become ${
