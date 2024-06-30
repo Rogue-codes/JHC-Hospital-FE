@@ -5,7 +5,6 @@ import { edu1, edu2, edu3, edu4, pic } from "../assets";
 import { IPatientFee } from "../interfaces/patientfee.interface";
 import { IDataType } from "../views/appointments/Appointments";
 import { IMessageList } from "../interfaces/messageList.interface";
-import { IInventory } from "../interfaces/inventory.interface";
 
 export const sideBarArr: ISidebar[] = [
   {
@@ -329,73 +328,5 @@ export const messagesListArr = [
   {
     msg: "Thank you for scheduling my appointment. I confirm that I will be present tomorrow at the designated time",
     time: "9:45am",
-  },
-];
-
-
-export const drugsArr: IInventory[] = [
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
-  },
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
-  },
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
-  },
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
-  },
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
-  },
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
-  },
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
-  },
-  {
-    expiryDate: "01 Jun 2024",
-    stockCount: 100,
-    manufacturer: "John’s Health Care",
-    price: 28.55,
-    productName: "Albuterol (salbutamol)",
-    type: "Inhaler",
   },
 ];

@@ -148,11 +148,11 @@ export default function AppointmentDetails({
                       className="ml-3"
                         color={
                           reservation.fee_status === "unpaid"
-                            ? "orange"
+                            ? "red"
                             : "green"
                         }
                       >
-                        ({reservation.fee_status})
+                        {reservation.fee_status}
                       </Tag>
                     </p>
                   </div>

@@ -176,7 +176,7 @@ export default function Appointments() {
       key: "fee_status",
       render: (_, row) => (
         <Space size="middle" className="">
-          <Tag color={row.fee_status === "unpaid" ? "orange" : "green"}>
+          <Tag color={row.fee_status === "unpaid" ? "red" : "green"}>
             {row.fee_status}
           </Tag>
         </Space>
@@ -188,8 +188,9 @@ export default function Appointments() {
       render: (_, row) => (
         <Space size="middle" className="">
           <p
-            className="text-JHC-Primary cursor-pointer font-semibold"
+            className={`${row.reservation_status === "rejected" && "opacity-50 cursor-not-allowed"} text-JHC-Primary cursor-pointer font-semibold`}
             onClick={() => {
+              if (row.reservation_status === "rejected") return;
               setselectedAppointment(row);
               setRescheduleAppointmentModal(true);
             }}
@@ -250,7 +251,6 @@ export default function Appointments() {
           dataSource={reservations?.data}
           pagination={false}
           loading={isLoading}
-          
         />
       </div>
       <div className="py-4 mt-5 flex justify-end items-center">
