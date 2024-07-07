@@ -80,6 +80,17 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ["Products", "Manufacturers"],
     }),
+    createBulkProduct: builder.mutation<any, FormData>({
+      query: (payload) => ({
+        url: `/product/bulk-create`,
+        method: "POST",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["Products", "Manufacturers"],
+    }),
     // deleteProduct: builder.mutation<any, {id: string }>({
     //   query: ({ id }) => ({
     //     url: `/product/update/${id}`,
@@ -93,4 +104,4 @@ export const productsApi = createApi({
   }),
 });
 
-export const { useGetProductsQuery, useCreateProductMutation, useGetManufacturersQuery } = productsApi;
+export const { useGetProductsQuery, useCreateProductMutation, useGetManufacturersQuery, useCreateBulkProductMutation } = productsApi;

@@ -105,6 +105,7 @@ export default function Filter({
           variant="borderless"
           className="border-JHC-Primary border rounded-2xl"
           onChange={handleManufacturerChange}
+          defaultValue={""}
         />
       )}
     </div>

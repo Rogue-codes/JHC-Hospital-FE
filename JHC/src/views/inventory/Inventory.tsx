@@ -8,6 +8,8 @@ import { useState } from "react";
 import { IProduct } from "../../interfaces/inventory.interface";
 import CreateProduct from "./CreateProduct";
 import CustomPagination from "../../components/pagination/CustomPagination";
+import DropdownComponent from "../../components/dropdown/Dropdown";
+import CreateBulkProducts from "./CreateBulkProducts";
 
 export default function Inventory() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,15 +18,16 @@ export default function Inventory() {
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState<string>("in stock");
   const [manufacturer, setManufacturer] = useState<string>('');
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
-  console.log("category", category);
+  console.log("manufacturer", manufacturer);
 
   const { data, isLoading } = useGetProductsQuery({
     page: currentPage,
     search: searchText,
     category: category,
     stock: stock,
-    manufacturer: manufacturer
+    manufacturer: manufacturer ? manufacturer : ""
   });
 
   const columns: TableProps<IProduct>["columns"] = [
@@ -79,7 +82,13 @@ export default function Inventory() {
 
   return (
     <div className="w-full p-5 bg-white h-screen border rounded-lg">
-      <InventoryHeader setOpenModal={setOpenModal} />
+      <div className="flex border-b-2 border-[#CFCFCF]">
+        <InventoryHeader />
+        <DropdownComponent
+          setOpenModal={setOpenModal}
+          setSelectedOption={setSelectedOption}
+        />
+      </div>
       <Filter
         showDropdown
         setSearch={setSearchText}
@@ -105,7 +114,11 @@ export default function Inventory() {
       </div>
 
       <Modal
-        title="Create new product"
+        title={
+          selectedOption === "single"
+            ? "Create new product"
+            : "Create new products"
+        }
         style={{ top: 20 }}
         open={openModal}
         footer={null}
@@ -114,7 +127,11 @@ export default function Inventory() {
         closable
         onCancel={() => setOpenModal(false)}
       >
-        <CreateProduct setOpenModal={setOpenModal} />
+        {selectedOption === "single" ? (
+          <CreateProduct setOpenModal={setOpenModal} />
+        ) : (
+          <CreateBulkProducts />
+        )}
       </Modal>
     </div>
   );
