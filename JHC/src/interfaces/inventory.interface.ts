@@ -1,4 +1,5 @@
 export interface IProduct {
+  _id?: string;
   name: string;
   price: number | string;
   description: string;
@@ -6,7 +7,7 @@ export interface IProduct {
   quantity: number | string;
   category: string;
   manufacturer: string;
-  image?: string;
+  images?: string[];
 }
 
 export interface IProductResponse {

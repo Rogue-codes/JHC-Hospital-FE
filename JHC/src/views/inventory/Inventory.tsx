@@ -10,6 +10,7 @@ import CreateProduct from "./CreateProduct";
 import CustomPagination from "../../components/pagination/CustomPagination";
 import DropdownComponent from "../../components/dropdown/Dropdown";
 import CreateBulkProducts from "./CreateBulkProducts";
+import ViewProductDetails from "./ViewProductDetails";
 
 export default function Inventory() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +18,7 @@ export default function Inventory() {
   const [openModal, setOpenModal] = useState(false);
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState<string>("in stock");
-  const [manufacturer, setManufacturer] = useState<string>('');
+  const [manufacturer, setManufacturer] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<string>("");
 
   console.log("manufacturer", manufacturer);
@@ -27,8 +28,22 @@ export default function Inventory() {
     search: searchText,
     category: category,
     stock: stock,
-    manufacturer: manufacturer ? manufacturer : ""
+    manufacturer: manufacturer ? manufacturer : "",
   });
+
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+  const [showViewProductModal, setShowViewProductModal] =
+    useState<boolean>(false);
+
+  const handleViewProduct = (product: IProduct) => {
+    setSelectedProduct(product);
+    setShowViewProductModal(true);
+  };
+
+  const handleClose = () => {
+    setSelectedProduct(null);
+    setShowViewProductModal(false);
+  };
 
   const columns: TableProps<IProduct>["columns"] = [
     {
@@ -64,7 +79,7 @@ export default function Inventory() {
     {
       title: "User Action",
       key: "action",
-      render: (_) => (
+      render: (_, row) => (
         <Space size="middle" className="">
           <div className="w-6 flex justify-center items-center h-6 rounded-lg bg-JHC-Primary cursor-pointer">
             <Icons.chat />
@@ -72,7 +87,10 @@ export default function Inventory() {
           <div className="w-6 h-6 rounded-lg border flex justify-center items-center border-JHC-Red cursor-pointer">
             <Icons.cancel />
           </div>
-          <div className="w-6 h-6 rounded-lg border flex justify-center items-center cursor-pointer  border-JHC-Primary">
+          <div
+            className="w-6 h-6 rounded-lg border flex justify-center items-center cursor-pointer  border-JHC-Primary"
+            onClick={() => handleViewProduct(row)}
+          >
             <Icons.info />
           </div>
         </Space>
@@ -132,6 +150,19 @@ export default function Inventory() {
         ) : (
           <CreateBulkProducts />
         )}
+      </Modal>
+
+      <Modal
+        title={selectedProduct?.name}
+        style={{ top: 20 }}
+        open={showViewProductModal}
+        footer={null}
+        centered
+        className="!w-[50vw]"
+        closable
+        onCancel={handleClose}
+      >
+        <ViewProductDetails id={selectedProduct?._id as string} />
       </Modal>
     </div>
   );

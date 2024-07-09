@@ -60,15 +60,15 @@ export const productsApi = createApi({
     //     },
     //   }),
     // }),
-    // getProductById: builder.query<any, { id: string }>({
-    //   query: ({ id }) => ({
-    //     url: `/product/${id}`,
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=UTF-8",
-    //     },
-    //   }),
-    // }),
+    getProductById: builder.query<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/product/${id}`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }),
+    }),
     createProduct: builder.mutation<any, IProduct>({
       query: (payload) => ({
         url: `/product/create`,
@@ -104,4 +104,4 @@ export const productsApi = createApi({
   }),
 });
 
-export const { useGetProductsQuery, useCreateProductMutation, useGetManufacturersQuery, useCreateBulkProductMutation } = productsApi;
+export const { useGetProductsQuery, useCreateProductMutation, useGetManufacturersQuery, useCreateBulkProductMutation, useGetProductByIdQuery } = productsApi;

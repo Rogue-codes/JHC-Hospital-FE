@@ -1,11 +1,21 @@
-import { DatePicker, Input, Select, Spin } from "antd";
-import { useEffect } from "react";
+import { DatePicker, Divider, Input, Select, Spin } from "antd";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { IProduct } from "../../interfaces/inventory.interface";
 import { useCreateProductMutation } from "../../api/products.api";
 import { toast } from "react-toastify";
 import TextArea from "antd/es/input/TextArea";
 import { LoadingOutlined } from "@ant-design/icons";
+
+interface IForm {
+  name: string;
+  category: string;
+  price: string;
+  quantity: string;
+  expiry_date: null;
+  manufacturer: string;
+  description: string;
+  images: File[];
+}
 
 interface ICreatePatient {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +26,8 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
     control,
     formState: { errors, isValid },
     reset,
-  } = useForm({
+    setValue,
+  } = useForm<IForm>({
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -26,8 +37,49 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
       expiry_date: null,
       manufacturer: "",
       description: "",
+      images: [],
     },
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const fileArray = Array.from(files); // Convert FileList to Array
+      setValue("images", fileArray, {
+        shouldValidate: true,
+      });
+    }
+  };
+
+  const [loading, setLoading] = useState(false);
+
+  const handleImageUpload = async (images: File[]) => {
+    try {
+      const uploadedImageUrls = await Promise.all(
+        images.map(async (image) => {
+          const formData = new FormData();
+          formData.append("file", image);
+          formData.append("upload_preset", "JHC-hospital");
+
+          const res = await fetch(
+            "https://api.cloudinary.com/v1_1/osuji/image/upload",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          const imgObj = await res.json();
+          return imgObj.secure_url.toString();
+        })
+      );
+
+      return uploadedImageUrls;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
+  };
 
   const [createProduct, { data, isLoading, isSuccess }] =
     useCreateProductMutation();
@@ -40,14 +92,24 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
     }
   }, [isSuccess]);
 
-  const handleCreateProduct = async (value: IProduct) => {
-    createProduct(value)
-      .unwrap()
-      .catch((e: any) => {
-        console.log(e);
-        toast.error(e?.data?.message);
-      });
+  const handleCreateProduct = async (values: IForm) => {
+    try {
+      setLoading(true);
+      const imageUrls = await handleImageUpload(values.images);
+      const productData = { ...values, images: imageUrls };
+      setLoading(false);
+      createProduct(productData)
+        .unwrap()
+        .catch((e: any) => {
+          console.log(e);
+          toast.error(e?.data?.message);
+        });
+    } catch (error) {
+      console.error("Error creating product:", error);
+      toast.error("Failed to create product.");
+    }
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit(handleCreateProduct)}>
@@ -217,6 +279,24 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
             />
           </div>
         </div>
+
+        <div className="w-full mt-5 flex justify-center items-center">
+          <Controller
+            name="images"
+            control={control}
+            render={() => (
+              <Input
+                type="file"
+                onChange={handleFileChange}
+                className="w-[50%] h-10"
+                multiple
+              />
+            )}
+          />
+        </div>
+
+        <Divider />
+
         <div className="w-full  mt-6 flex justify-end items-center gap-5">
           <button
             type="button"
@@ -231,7 +311,7 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
             disabled={!isValid}
             className="bg-JHC-Primary text-white p-1 disabled:opacity-50 disabled:cursor-not-allowed border border-JHC-Primary hover:scale-110 transition-all px-6 rounded-lg"
           >
-            {isLoading ? (
+            {isLoading || loading ? (
               <Spin
                 className="text-white"
                 indicator={<LoadingOutlined spin color="white" />}
