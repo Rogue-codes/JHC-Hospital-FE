@@ -101,10 +101,7 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ["Products"],
     }),
-    updateProduct: builder.mutation<
-      any,
-      { payload: any; id: string }
-    >({
+    updateProduct: builder.mutation<any, { payload: any; id: string }>({
       query: ({ id, payload }) => ({
         url: `/product/update/${id}`,
         method: "PUT",
@@ -112,6 +109,19 @@ export const productsApi = createApi({
           "Content-Type": "application/json; charset=UTF-8",
         },
         body: payload,
+      }),
+      invalidatesTags: ["Products", "Manufacturers"],
+    }),
+    increaseStock: builder.mutation<any, { count: string; id: string }>({
+      query: ({ id, count }) => ({
+        url: `/product/add/${id}`,
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: {
+          count,
+        },
       }),
       invalidatesTags: ["Products", "Manufacturers"],
     }),
@@ -125,5 +135,6 @@ export const {
   useCreateBulkProductMutation,
   useGetProductByIdQuery,
   useDeleteProductMutation,
-  useUpdateProductMutation
+  useUpdateProductMutation,
+  useIncreaseStockMutation,
 } = productsApi;

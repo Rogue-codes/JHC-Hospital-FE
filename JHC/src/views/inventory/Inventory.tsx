@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  Button,
   ConfigProvider,
+  Input,
   Modal,
   Popconfirm,
+  Popover,
   Space,
   Table,
   TableProps,
@@ -13,6 +16,7 @@ import { Icons } from "../../components/icons";
 import {
   useDeleteProductMutation,
   useGetProductsQuery,
+  useIncreaseStockMutation,
 } from "../../api/products.api";
 import { useEffect, useState } from "react";
 import { IProduct } from "../../interfaces/inventory.interface";
@@ -46,7 +50,7 @@ export default function Inventory() {
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [showViewProductModal, setShowViewProductModal] =
     useState<boolean>(false);
-
+  const [count, setCount] = useState(0);
   const handleViewProduct = (product: IProduct) => {
     setSelectedProduct(product);
     setShowViewProductModal(true);
@@ -79,11 +83,49 @@ export default function Inventory() {
     setOpenModal(true);
     setShowViewProductModal(false);
     setSelectedOption("single");
-  }
+  };
+
+  const [increaseStock, { data: increasedStock, isSuccess: isIncreased }] =
+    useIncreaseStockMutation();
+
+  useEffect(() => {
+    if (isIncreased) {
+      toast.success(increasedStock?.message);
+      setCount(0);
+      setSelectedProduct(null);
+    }
+  }, [isIncreased]);
+
+  const handleStockIncrease = () => {
+    console.log("id", selectedProduct?._id);
+    increaseStock({
+      id: selectedProduct?._id as string,
+      count: count.toString(),
+    })
+      .unwrap()
+      .catch((e: any) => {
+        console.log(e);
+        toast.error(e?.data?.message);
+      });
+  };
 
   const text = `Are you sure you want to delete ${selectedProduct?.name} ?`;
   const description = `Product will be removed from the inventory`;
   const buttonWidth = 80;
+
+  const content = (
+    <div className="flex justify-center items-center gap-4">
+      <Input
+        value={count}
+        onChange={(e) => setCount(parseInt(e.target.value))}
+        type="number"
+        className="w-[50%]"
+      />
+      <Button type="primary" onClick={handleStockIncrease}>
+        Add
+      </Button>
+    </div>
+  );
 
   const columns: TableProps<IProduct>["columns"] = [
     {
@@ -121,9 +163,19 @@ export default function Inventory() {
       key: "action",
       render: (_, row) => (
         <Space size="middle" className="">
-          <div className="w-6 flex justify-center items-center h-6 rounded-lg bg-JHC-Primary cursor-pointer">
-            <Icons.chat />
-          </div>
+          <Popover
+            content={content}
+            open={selectedProduct?._id === row._id}
+            title="Increase stock"
+            trigger="click"
+          >
+            <div
+              className="w-6 flex justify-center items-center h-6 rounded-lg bg-JHC-Primary cursor-pointer"
+              onClick={() => setSelectedProduct(row)}
+            >
+              <Icons.chat />
+            </div>
+          </Popover>
           <ConfigProvider
             button={{
               style: { width: buttonWidth, margin: 4 },
@@ -207,7 +259,10 @@ export default function Inventory() {
         onCancel={() => setOpenModal(false)}
       >
         {selectedOption === "single" ? (
-          <CreateProduct setOpenModal={setOpenModal} correctProductObject={selectedProduct}/>
+          <CreateProduct
+            setOpenModal={setOpenModal}
+            correctProductObject={selectedProduct}
+          />
         ) : (
           <CreateBulkProducts />
         )}
