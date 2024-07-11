@@ -91,17 +91,39 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ["Products", "Manufacturers"],
     }),
-    // deleteProduct: builder.mutation<any, {id: string }>({
-    //   query: ({ id }) => ({
-    //     url: `/product/update/${id}`,
-    //     method: "DELETE",
-    //     headers: {
-    //       "Content-type": "application/json; charset=UTF-8",
-    //     },
-    //   }),
-    //   invalidatesTags: ["Products"],
-    // }),
+    deleteProduct: builder.mutation<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/product/delete/${id}`,
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    updateProduct: builder.mutation<
+      any,
+      { payload: any; id: string }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/product/update/${id}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["Products", "Manufacturers"],
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useCreateProductMutation, useGetManufacturersQuery, useCreateBulkProductMutation, useGetProductByIdQuery } = productsApi;
+export const {
+  useGetProductsQuery,
+  useCreateProductMutation,
+  useGetManufacturersQuery,
+  useCreateBulkProductMutation,
+  useGetProductByIdQuery,
+  useDeleteProductMutation,
+  useUpdateProductMutation
+} = productsApi;

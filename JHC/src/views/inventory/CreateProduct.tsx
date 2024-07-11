@@ -1,17 +1,22 @@
 import { DatePicker, Divider, Input, Select, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useCreateProductMutation } from "../../api/products.api";
+import {
+  useCreateProductMutation,
+  useUpdateProductMutation,
+} from "../../api/products.api";
 import { toast } from "react-toastify";
 import TextArea from "antd/es/input/TextArea";
 import { LoadingOutlined } from "@ant-design/icons";
+import { IProduct } from "../../interfaces/inventory.interface";
+import dayjs from "dayjs";
 
 interface IForm {
   name: string;
   category: string;
   price: string;
   quantity: string;
-  expiry_date: null;
+  expiry_date: any;
   manufacturer: string;
   description: string;
   images: File[];
@@ -19,8 +24,12 @@ interface IForm {
 
 interface ICreatePatient {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  correctProductObject: IProduct | null;
 }
-export default function CreateProduct({ setOpenModal }: ICreatePatient) {
+export default function CreateProduct({
+  setOpenModal,
+  correctProductObject,
+}: ICreatePatient) {
   const {
     handleSubmit,
     control,
@@ -34,12 +43,32 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
       category: "",
       price: "",
       quantity: "",
-      expiry_date: null,
+      expiry_date: "",
       manufacturer: "",
       description: "",
       images: [],
     },
   });
+
+  console.log("selectProduct", correctProductObject);
+
+  const expiry_date = dayjs(correctProductObject?.expiry_date).format(
+    "YYYY-MM-DD"
+  );
+
+  useEffect(() => {
+    if (correctProductObject) {
+      setValue("name", correctProductObject?.name);
+      setValue("category", correctProductObject?.category);
+      setValue("price", correctProductObject?.price as string);
+      setValue("quantity", correctProductObject?.quantity as string);
+      const expiry_date_ = dayjs(expiry_date);
+      setValue("expiry_date", expiry_date_);
+      setValue("manufacturer", correctProductObject?.manufacturer);
+      setValue("description", correctProductObject?.description);
+      // setValue("images", correctProductObject?.images);
+    }
+  }, [correctProductObject]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -84,6 +113,11 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
   const [createProduct, { data, isLoading, isSuccess }] =
     useCreateProductMutation();
 
+  const [
+    updateProduct,
+    { data: updateData, isLoading: isUpdating, isSuccess: isUpdated },
+  ] = useUpdateProductMutation();
+
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message);
@@ -91,6 +125,14 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
       setOpenModal(false);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isUpdated) {
+      toast.success(updateData?.message);
+      reset();
+      setOpenModal(false);
+    }
+  }, [isUpdated]);
 
   const handleCreateProduct = async (values: IForm) => {
     try {
@@ -110,9 +152,34 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
     }
   };
 
+  const handleUpdateProduct = async (values: IForm) => {
+    try {
+      setLoading(true);
+      const imageUrls = await handleImageUpload(values.images);
+      const productData = { ...values, images: imageUrls };
+      setLoading(false);
+      updateProduct({
+        payload: productData,
+        id: correctProductObject?._id as string,
+      })
+        .unwrap()
+        .catch((e: any) => {
+          console.log(e);
+          toast.error(e?.data?.message);
+        });
+    } catch (error) {
+      console.error("Error creating product:", error);
+      toast.error("Failed to create product.");
+    }
+  };
+
   return (
     <div>
-      <form onSubmit={handleSubmit(handleCreateProduct)}>
+      <form
+        onSubmit={handleSubmit(
+          correctProductObject ? handleUpdateProduct : handleCreateProduct
+        )}
+      >
         <div className="w-full bg-white">
           <div className="w-full flex my-8 justify-between items-center gap-5">
             <Controller
@@ -301,7 +368,6 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
           <button
             type="button"
             className="border border-JHC-Primary text-JHC-Primary p-1 hover:scale-110 transition-all px-6 rounded-lg"
-            // onClick={() => setOpenModal(false)}
           >
             Cancel
           </button>
@@ -311,13 +377,13 @@ export default function CreateProduct({ setOpenModal }: ICreatePatient) {
             disabled={!isValid}
             className="bg-JHC-Primary text-white p-1 disabled:opacity-50 disabled:cursor-not-allowed border border-JHC-Primary hover:scale-110 transition-all px-6 rounded-lg"
           >
-            {isLoading || loading ? (
+            {isLoading || loading || isUpdating ? (
               <Spin
                 className="text-white"
                 indicator={<LoadingOutlined spin color="white" />}
               />
             ) : (
-              "Create"
+              <>{correctProductObject ? "Update" : "Create"}</>
             )}
           </button>
         </div>

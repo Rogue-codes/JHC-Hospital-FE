@@ -1,16 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Modal, Space, Table, TableProps } from "antd";
+import {
+  ConfigProvider,
+  Modal,
+  Popconfirm,
+  Space,
+  Table,
+  TableProps,
+} from "antd";
 import Filter from "../../components/filters/Filter";
 import InventoryHeader from "./InventoryHeader";
 import { Icons } from "../../components/icons";
-import { useGetProductsQuery } from "../../api/products.api";
-import { useState } from "react";
+import {
+  useDeleteProductMutation,
+  useGetProductsQuery,
+} from "../../api/products.api";
+import { useEffect, useState } from "react";
 import { IProduct } from "../../interfaces/inventory.interface";
 import CreateProduct from "./CreateProduct";
 import CustomPagination from "../../components/pagination/CustomPagination";
 import DropdownComponent from "../../components/dropdown/Dropdown";
 import CreateBulkProducts from "./CreateBulkProducts";
 import ViewProductDetails from "./ViewProductDetails";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
 
 export default function Inventory() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,6 +56,34 @@ export default function Inventory() {
     setSelectedProduct(null);
     setShowViewProductModal(false);
   };
+
+  const [deleteProduct, { data: response, isLoading: isDeleting, isSuccess }] =
+    useDeleteProductMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(response?.message);
+    }
+  }, [isSuccess]);
+
+  const handleDeleteProduct = () => {
+    deleteProduct({ id: selectedProduct?._id as string })
+      .unwrap()
+      .catch((e: any) => {
+        console.log(e);
+        toast.error(e?.data?.message);
+      });
+  };
+
+  const handleModifyProduct = () => {
+    setOpenModal(true);
+    setShowViewProductModal(false);
+    setSelectedOption("single");
+  }
+
+  const text = `Are you sure you want to delete ${selectedProduct?.name} ?`;
+  const description = `Product will be removed from the inventory`;
+  const buttonWidth = 80;
 
   const columns: TableProps<IProduct>["columns"] = [
     {
@@ -84,9 +124,30 @@ export default function Inventory() {
           <div className="w-6 flex justify-center items-center h-6 rounded-lg bg-JHC-Primary cursor-pointer">
             <Icons.chat />
           </div>
-          <div className="w-6 h-6 rounded-lg border flex justify-center items-center border-JHC-Red cursor-pointer">
-            <Icons.cancel />
-          </div>
+          <ConfigProvider
+            button={{
+              style: { width: buttonWidth, margin: 4 },
+            }}
+          >
+            <Popconfirm
+              placement="bottom"
+              title={text}
+              description={description}
+              arrow
+              okText={isDeleting ? "loading..." : "Yes"}
+              cancelText="No"
+              onConfirm={handleDeleteProduct}
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <div
+                className="w-6 h-6 rounded-lg border flex justify-center items-center border-JHC-Red cursor-pointer"
+                onClick={() => setSelectedProduct(row)}
+              >
+                <Icons.cancel />
+              </div>
+            </Popconfirm>
+          </ConfigProvider>
+
           <div
             className="w-6 h-6 rounded-lg border flex justify-center items-center cursor-pointer  border-JHC-Primary"
             onClick={() => handleViewProduct(row)}
@@ -146,7 +207,7 @@ export default function Inventory() {
         onCancel={() => setOpenModal(false)}
       >
         {selectedOption === "single" ? (
-          <CreateProduct setOpenModal={setOpenModal} />
+          <CreateProduct setOpenModal={setOpenModal} correctProductObject={selectedProduct}/>
         ) : (
           <CreateBulkProducts />
         )}
@@ -162,7 +223,10 @@ export default function Inventory() {
         closable
         onCancel={handleClose}
       >
-        <ViewProductDetails id={selectedProduct?._id as string} />
+        <ViewProductDetails
+          id={selectedProduct?._id as string}
+          handleModifyProduct={handleModifyProduct}
+        />
       </Modal>
     </div>
   );
