@@ -1,18 +1,44 @@
-import { chatbg, pic } from "../../assets";
+import { chatbg } from "../../assets";
 import ChatArea from "./ChatArea";
 import { Icons } from "../../components/icons";
-import { messagesListArr } from "../../constants/constants";
+import { IMessage } from "../../interfaces/message.interface";
+import { useSelector } from "react-redux";
+import { formattedTime } from "../../utils";
+import { IPatient } from "../../interfaces/patientfee.interface";
+import { useEffect, useRef } from "react";
 
-export default function Message() {
+interface IMessage_ {
+  messages: IMessage[];
+  selectedConversation: IPatient | null;
+  handleSendMessage: () => void;
+  message_: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
+}
+export default function Message({
+  messages,
+  selectedConversation,
+  handleSendMessage,
+  message_,
+  setMessage,
+}: IMessage_) {
+  const user = useSelector((state: any) => state.auth.user);
+
   const chatHeader = () => {
     return (
       <div className="bg-JHC-Primary w-full h-[53px] rounded-tr-xl rounded-tl-xl flex justify-between items-center px-4">
         <div className="flex justify-start gap-4">
           <div className="w-10 flex justify-center items-center h-10 rounded-full">
-            <img src={pic} alt="" />
+            <img
+              src={selectedConversation?.img_url}
+              className="rounded-full h-full w-full object-cover"
+              alt=""
+            />
           </div>
           <div>
-            <p className="text-sm text-white">Elizabeth Polson</p>
+            <p className="text-sm text-white">
+              {selectedConversation?.first_name}{" "}
+              {selectedConversation?.last_name}
+            </p>
             <p className="text-xs text-white">Online</p>
           </div>
         </div>
@@ -21,6 +47,14 @@ export default function Message() {
       </div>
     );
   };
+
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }, [messages]);
 
   return (
     <div className="w-[50vw] bg-white h-[90%] relative">
@@ -31,33 +65,38 @@ export default function Message() {
           <img src={chatbg} className="w-full h-full object-cover" alt="" />
         </div>
 
-        <div className="pt-5 w-full px-5 h-[calc(100%-53px)] overflow-y-scroll relative z-10">
-          {messagesListArr.map((message, index) => (
+        <div className="pt-5  w-full px-5 h-[calc(100%-53px)] overflow-y-scroll relative z-10">
+          {messages?.map((message) => (
             <div
-              key={index} // Add a unique key to each mapped element
+              key={message._id} // Add a unique key to each mapped element
               className={`${
-                index % 2 === 0 ? "justify-start" : "justify-end"
+                user._id !== message.senderId ? "justify-start" : "justify-end"
               } mb-2 flex items-center w-full`}
+              ref={lastMessageRef}
             >
               <div className="w-[25vw]">
                 <div
                   className={`${
-                    index % 2 === 0
+                    user._id !== message.senderId
                       ? "bg-gray-200 text-black"
                       : "bg-JHC-Primary text-white"
                   } rounded-2xl w-full py-4 px-3 h-full`}
                 >
-                  <p>{message.msg}</p>
+                  <p>{message.message}</p>
                 </div>
                 <p className="text-xs pl-2 mt-2 text-gray-700">
-                  {message.time}
+                  {formattedTime(message.timestamp)}
                 </p>
               </div>
             </div>
           ))}
         </div>
 
-        <ChatArea />
+        <ChatArea
+          handleSendMessage={handleSendMessage}
+          message_={message_}
+          setMessage={setMessage}
+        />
       </div>
     </div>
   );
