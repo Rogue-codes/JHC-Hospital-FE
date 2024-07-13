@@ -6,6 +6,7 @@ import { doctorsApi } from "../api/doctors.api";
 import { patientsApi } from "../api/patients.api";
 import { reservationApi } from "../api/reservation.api";
 import { productsApi } from "../api/products.api";
+import { messageApi } from "../api/message.api";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [patientsApi.reducerPath]: patientsApi.reducer,
     [reservationApi.reducerPath]: reservationApi.reducer,
     [productsApi.reducerPath]: productsApi.reducer,
+    [messageApi.reducerPath]: messageApi.reducer,
     auth: userSlice.reducer,
   },
 
@@ -24,7 +26,8 @@ export const store = configureStore({
       .concat(doctorsApi.middleware)
       .concat(patientsApi.middleware)
       .concat(reservationApi.middleware)
-      .concat(productsApi.middleware),
+      .concat(productsApi.middleware)
+      .concat(messageApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
